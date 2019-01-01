@@ -27,18 +27,20 @@ function SlideMenu($, options) {
     this._Button = options.button || null;
     this._percent = options.percent || 0.25; // percent to open
     this._area = options.area || 0.1; // 10% of left body is area where menu could be opened
-    this._areaOpened = options.areaOpened || false; // if menu is opened, then area is full width
+    this._areaOpened = options.areaOpened || false; // if menu is opened, then area is full width, currently not working
     this._enabled = false;
     this._debug = options.debug || false;
     this._closeMenuOnWidth = options.closeMenuOnWidth || false;
     this._disableMenuOnWidth = options.disableMenuOnWidth || false; //disable touch listeners when window is higher then specific width
     this._size = options.size || 300;
+    this._animationTime = options.animationTime || 300; // the time of ease-in-out animation for (*)Ended events
     this._X;
     this._Y;
     this._W;
 
-
+    this._createEvents();
     this._init();
+
 }
 
 /**
@@ -52,6 +54,7 @@ SlideMenu.prototype.touch_start = function(e) {
 
     $(this._Canvas).removeClass();
     this._enabled = true;
+    $(document).trigger(this._eventTouchStart);
     if (!this._X)
         this._X = e.touches[0].clientX;
     if (!this._Y)
@@ -69,6 +72,7 @@ SlideMenu.prototype.touch_move = function(e) {
             e.preventDefault();
         } catch(err) {this._log("e.preventDefault not supported");}
     if (this._enabled) {
+        $(document).trigger(this._eventTouchMove);
         this._log("Touch enabled");
         this._log("0: " + this._X);
         this._log("1: " + (e.touches[0].clientX));
@@ -91,6 +95,7 @@ SlideMenu.prototype.touch_move = function(e) {
 SlideMenu.prototype.touch_end = function(e) {
     if(!this._enabled)
         return;
+    $(document).trigger(this._eventTouchEnd);
     this._log("End (e)");
     this._log(e);
     this._log("3: " + "X: " + e.changedTouches[0].clientX);
@@ -115,6 +120,7 @@ SlideMenu.prototype.touch_end = function(e) {
                 this._log("not_enough to close");
                 $(this._Canvas).css("transform", "translateX(" + this._size + "px)");
                 $(this._Canvas).data("x", this._size);
+                $(document).trigger(this._eventNotEnough);
             }
         }
     } else {
@@ -128,6 +134,7 @@ SlideMenu.prototype.touch_end = function(e) {
             //not enough
             $(this._Canvas).css("transform", "translateX(" + 0 + "px)");
             $(this._Canvas).data("x", 0);
+            $(document).trigger(this._eventNotEnough);
         }
     }
     this._X = 0;
@@ -143,7 +150,11 @@ SlideMenu.prototype.openMenu = function() {
     $(this._Canvas).addClass('ease-in-out');
     $(this._Wrapper).addClass('show-nav');
     $(this._Wrapper).addClass('no-overflow');
-    $(this._Canvas).data("x", this._size);
+    $(document).trigger(this._eventOpen);
+    let e = this._eventOpenEnded;
+    setTimeout(function () {
+        $(document).trigger(e);
+    }, this._animationTime);
 }
 
 /**
@@ -156,6 +167,11 @@ SlideMenu.prototype.closeMenu = function () {
     $(this._Wrapper).removeClass('show-nav');
     $(this._Wrapper).removeClass('no-overflow');
     $(this._Canvas).data("x", 0);
+    let e = this._eventCloseEnded;
+    $(document).trigger(this._eventClose);
+    setTimeout(function () {
+        $(document).trigger(e);
+    }, this._animationTime);
 }
 
 /**
@@ -173,6 +189,11 @@ SlideMenu.prototype.toggleMenu = function () {
     $(this._Canvas).addClass('ease-in-out');
     $(this._Wrapper).toggleClass('show-nav');
     $(this._Wrapper).toggleClass('no-overflow');
+    $(document).trigger(this._eventToggle);
+    let e = this._eventToggleEnded;
+    setTimeout(function () {
+        $(document).trigger(e);
+    }, this._animationTime);
 }
 
 
@@ -182,6 +203,24 @@ SlideMenu.prototype.toggleMenu = function () {
  */
 SlideMenu.prototype._isMenuOpened = function () {
     return $(this._Wrapper).hasClass('show-nav');
+}
+
+//In future add some details to each event, e.g. to touchMoved actual (m) etc.
+//it could trigger event by using this instead of document - $(this).trigger(this._event); and on client side it could be use by using reference instead document, e.g. - $(sm).on('event', function () {});
+/**
+ * Create all events.
+ */
+SlideMenu.prototype._createEvents = function () {
+    this._eventOpen = jQuery.Event('menuOpen', []); // U
+    this._eventClose = jQuery.Event('menuClose', []); // U
+    this._eventOpenEnded = jQuery.Event('menuOpenEnded', []); // U
+    this._eventCloseEnded = jQuery.Event('menuCloseEnded', []); // U
+    this._eventNotEnough = jQuery.Event('menuNotEnough', []); // U - When the menu does not close or open after touch end
+    this._eventToggle = jQuery.Event('menuToggle', []); // U
+    this._eventToggleEnded = jQuery.Event('menuToggleEnded', []);
+    this._eventTouchStart = jQuery.Event('touchStarted', []); // U
+    this._eventTouchMove = jQuery.Event('touchMoved', []); // U
+    this._eventTouchEnd = jQuery.Event('touchEnded', []); // U
 }
 
 /**

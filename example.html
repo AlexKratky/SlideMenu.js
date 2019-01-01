@@ -142,5 +142,11 @@
         $("#close-menu").on('click', function() {
             sm.closeMenu();
         });
+        $(document).on('menuToggle', function () { console.log("menuToggle"); });
+
+        $(document).on('menuOpenEnded', function() {
+            //setTimeout(function () { alert("opened"); }, 300);
+            alert("menu's animation ended after 300 ms");
+        });
     });
 </script>

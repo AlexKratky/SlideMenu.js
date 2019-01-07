@@ -21,7 +21,7 @@
 <img src="https://i.imgur.com/.gif" alt="SlideMenu.js demo">
 
 ## Installation
-Download SlideMenu.js and SlideMenu.css from releases, include them in `<head>` by entering following code:
+Download SlideMenu.js and SlideMenu.css from [https://github.com/AlexKratky/SlideMenu.js/releases](releases), include them in `<head>` by entering following code:
 ```html
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="SlideMenu.js"></script>

@@ -1,6 +1,5 @@
 <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
 <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-<!--<meta name="viewport" content="width=device-width, initial-scale=1">-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
 <body id="site-wrapper">
 
@@ -25,104 +24,57 @@
     </div>
 
 </body>
+<link rel="stylesheet" href="SlideMenu.css">
 <style>
-    * {
-        box-sizing: border-box;
-        padding: 0;
-        margin: 0;
-        font-family: 'Roboto', sans-serif;
-    }
-    body {
-        padding: 0;
-        margin: 0;
-        height: 200%;
-    }
-    #site-wrapper {
-        position: relative;
-        /*width: 100%;*/
-        /* Temp: Simulates a tall page. */
-    }
-    .no-overflow {
-        overflow: hidden;
-        touch-action: none;
-    }
-    #site-canvas {
-        
-        height: 100%;
-        position: relative;
-        -webkit-transform: translateX(0);
-        transform: translateX(0);
+/*Demo css, not important*/
+* {
+    font-family: 'Roboto', sans-serif;
+}
 
-        -webkit-transform: translate3d(0, 0, 0);
-        transform: translate3d(0, 0, 0);
+body {
+    height: 200%;
+}
 
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
+.m {
+    font-size: 30px;
+    text-decoration: none;
+    color: #00b6ff;
+    display: inline-block;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
 
-        padding: 20px;
-        /* Temp: Just spacing. */
-    }
+.m a:hover i {
+    -webkit-transform: scale(1.5);
+}
 
-    .show-nav #site-canvas {
-        -webkit-transform: translateX(300px);
-        transform: translateX(300px);
+.m a:hover {}
 
-        transform: translate3d(300px, 0, 0);
-        -webkit-transform: translate3d(300px, 0, 0);
-    }
+.m i,
+.m span {
+    margin-right: 10px;
+    display: inline-block;
+    text-align: center;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-transition: all 400ms cubic-bezier(0.32, 1.25, 0.375, 1.15);
+    transition: all 400ms cubic-bezier(0.32, 1.25, 0.375, 1.15);
+}
 
-    #site-menu {
-        width: 300px;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        left: -300px;
-        background: #428bca;
-        padding: 15px;
-    }
+body {
+    /*box-shadow: inset 0 0 100px rgba(0, 0, 0, .5);*/
+    background-color: #333;
+    color: #fff;
+}
 
-    .ease-in-out {
-        -webkit-transition: 300ms ease-out all;
-        transition: 300ms ease-out all;
-    }
-    .m {
-        font-size: 30px;
-        text-decoration: none;
-        color: #00b6ff;
-        display: inline-block;
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
+.link {
+    color: #00b6ff;
+    text-decoration: none;
+}
 
-    .m a:hover i {
-        -webkit-transform: scale(1.5);
-    }
-
-    .m a:hover {
-    }
-
-    .m i,
-    .m span {
-        margin-right: 10px;
-        display: inline-block;
-        text-align: center;
-        -webkit-transform: scale(1);
-        transform: scale(1);
-        -webkit-transition: all 400ms cubic-bezier(0.32, 1.25, 0.375, 1.15);
-        transition: all 400ms cubic-bezier(0.32, 1.25, 0.375, 1.15);
-    }
-    body {
-        /*box-shadow: inset 0 0 100px rgba(0, 0, 0, .5);*/
-        background-color: #333;
-        color: #fff;
-    }
-    .link {
-        color:#00b6ff;
-        text-decoration: none;
-    }
-    .link:hover {
-        text-decoration: underline;
-    }
+.link:hover {
+    text-decoration: underline;
+}
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="SlideMenu.js"></script>
@@ -130,12 +82,15 @@
     var sm;
     $(document).ready(function () {
         sm = new SlideMenu(window.jQuery || window.$, {
+            /*
+            //If you are using default IDs, you don't really need to enter this, but if you are using for example button to open a menu with a different ID than #logo, you need to change it.
             'container': document.querySelector('body'),
             'wrapper': document.getElementById('site-wrapper'),
             'canvas': document.getElementById('site-canvas'),
             'button': document.getElementById('logo'),
+            */
             'closeMenuOnWidth': 680,
-            'disableMenuOnWidth': 680,
+            //'disableMenuOnWidth': 680,
             'debug': true
         });
         // additional listeners
@@ -144,9 +99,9 @@
         });
         $(document).on('menuToggle', function () { console.log("menuToggle"); });
 
-        $(document).on('menuOpenEnded', function() {
+        $(document).on('menuOpenEnded menuToggleEnded', function() {
             //setTimeout(function () { alert("opened"); }, 300);
-            alert("menu's animation ended after 300 ms");
+            console.log("menu's animation ended after 300 ms");
         });
     });
 </script>

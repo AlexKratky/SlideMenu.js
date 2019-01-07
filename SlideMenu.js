@@ -10,7 +10,8 @@
  * @description Easy off-canvas menu with mobile touch support.
  */
 
-
+//TODO
+    //change private and public functions correctly
 'use strict';
 /**
  * Creates instance of SlideMenu with specific options.
@@ -21,10 +22,10 @@ function SlideMenu($, options) {
     options = options || {};
 
     // Define variables
-    this._B = options.container || null;
-    this._Wrapper = options.wrapper || null;
-    this._Canvas = options.canvas || null;
-    this._Button = options.button || null;
+    this._B = options.container || document.querySelector('body');
+    this._Wrapper = options.wrapper || document.getElementById('site-wrapper');
+    this._Canvas = options.canvas || document.getElementById('site-canvas');
+    this._Button = options.button || document.getElementById('logo');
     this._percent = options.percent || 0.25; // percent to open
     this._area = options.area || 0.1; // 10% of left body is area where menu could be opened
     this._areaOpened = options.areaOpened || false; // if menu is opened, then area is full width, currently not working
@@ -47,7 +48,7 @@ function SlideMenu($, options) {
  * Clear classes from canvas, enable touch and set start coordinates.
  */
 SlideMenu.prototype.touch_start = function(e) {
-    if (this._disableMenuOnWidth <= this._W)
+    if (this._disableMenuOnWidth <= this._W && this._disableMenuOnWidth !== false)
         return;
     if (e.touches[0].clientX >= this._W * this._area + (this._isMenuOpened() ? this._size : 0) /*&& (!this._isMenuOpened() && !this._areaOpened)*/)
         return;
@@ -67,7 +68,7 @@ SlideMenu.prototype.touch_start = function(e) {
  * Visualizes touch move.
  */
 SlideMenu.prototype.touch_move = function(e) {
-    if(this._isMenuOpened)
+    if(this._isMenuOpened())
         try {
             e.preventDefault();
         } catch(err) {this._log("e.preventDefault not supported");}

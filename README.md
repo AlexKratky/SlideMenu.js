@@ -10,9 +10,9 @@
 - [API](#api)
  - [SlideMenu.js options](#slidemenu-options-)
 - [SlideMenu.js events](#events)
-<!-- Currently not available. - [Documentation](#documentation) -->
 - [Author](#with-heart-by)
 - [License](#license)
+<!-- Currently not available. - [Documentation](#documentation) -->
 
 ## Demo
 

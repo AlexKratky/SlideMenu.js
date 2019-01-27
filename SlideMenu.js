@@ -18,7 +18,7 @@
  * @param {object} $ jQuery
  * @param {object} options See the documentation for all available options.
  */
-function SlideMenu($, options) {
+function SlideMenu(options) {
     options = options || {};
 
     // Define variables
@@ -35,6 +35,7 @@ function SlideMenu($, options) {
     this._disableMenuOnWidth = options.disableMenuOnWidth || false; //disable touch listeners when window is higher then specific width
     this._size = options.size || 300;
     this._animationTime = options.animationTime || 300; // the time of ease-in-out animation for (*)Ended events
+    this._direction = options.direction || 'left'; // 'left' or 'right';
     this._X;
     this._Y;
     this._W;
@@ -50,7 +51,7 @@ function SlideMenu($, options) {
 SlideMenu.prototype.touch_start = function(e) {
     if (this._disableMenuOnWidth <= this._W && this._disableMenuOnWidth !== false)
         return;
-    if (e.touches[0].clientX >= this._W * this._area + (this._isMenuOpened() ? this._size : 0) /*&& (!this._isMenuOpened() && !this._areaOpened)*/)
+    if (e.touches[0].clientX >= this._W * this._area + (this.isMenuOpened() ? this._size : 0) /*&& (!this.isMenuOpened() && !this._areaOpened)*/)
         return;
 
     $(this._Canvas).removeClass();
@@ -68,7 +69,7 @@ SlideMenu.prototype.touch_start = function(e) {
  * Visualizes touch move.
  */
 SlideMenu.prototype.touch_move = function(e) {
-    if(this._isMenuOpened())
+    if(this.isMenuOpened())
         try {
             e.preventDefault();
         } catch(err) {this._log("e.preventDefault not supported");}
@@ -117,7 +118,7 @@ SlideMenu.prototype.touch_end = function(e) {
             this.closeMenu();
         } else {
             //not enough
-            if(this._isMenuOpened()) {
+            if(this.isMenuOpened()) {
                 this._log("not_enough to close");
                 $(this._Canvas).css("transform", "translateX(" + this._size + "px)");
                 $(this._Canvas).data("x", this._size);
@@ -182,7 +183,7 @@ SlideMenu.prototype.toggleMenu = function () {
     this._log("Clicked");
     $(this._Canvas).removeAttr("style");
     $(this._Canvas).removeClass();
-    if (this._isMenuOpened()) {
+    if (this.isMenuOpened()) {
         $(this._Canvas).data("x", 0);
     } else {
         $(this._Canvas).data("x", this._size);
@@ -202,7 +203,7 @@ SlideMenu.prototype.toggleMenu = function () {
  * Checks if menu is opened or not.
  * @return boolean
  */
-SlideMenu.prototype._isMenuOpened = function () {
+SlideMenu.prototype.isMenuOpened = function () {
     return $(this._Wrapper).hasClass('show-nav');
 }
 

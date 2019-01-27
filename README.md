@@ -56,7 +56,7 @@ Also, before including SlideMenu.js you need include jQuery.
     <script>
         var sm;
         $(document).ready(function () {
-            sm = new SlideMenu(window.jQuery || window.$, {
+            sm = new SlideMenu({
                 'debug': true 
             });
         });
@@ -122,10 +122,10 @@ Toggles (open/close) the menu. It emits `menuToggle` and `menuToggleEnded` event
 sm.toggleMenu();
 ```
 
-### SlideMenu._isMenuOpened();
+### SlideMenu.isMenuOpened();
 Returns true if the menu is currently open, and false if it is closed.
 ```js
-sm._isMenuOpened(); // true or false
+sm.isMenuOpened(); // true or false
 ```
 
 ## Events
